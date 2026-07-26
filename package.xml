@@ -9,10 +9,12 @@
   <license file="LICENSE">MIT</license>
   <icon>Resources/icons/print_exporter.svg</icon>
   <content>
-    <macro>
+    <workbench>
+      <classname>PrintExporterWorkbench</classname>
       <name>3D Print Exporter</name>
       <icon>Resources/icons/print_exporter.svg</icon>
-    </macro>
+      <subdirectory>.</subdirectory>
+    </workbench>
   </content>
   <freecadmin>1.0.0</freecadmin>
   <pythonmin>3.11</pythonmin>

@@ -62,6 +62,15 @@ def _add_menu(attempts: int = 40):
     action.triggered.connect(_run)
     menu.addAction(action)
 
+    # Parametric datum hooks: create a tree object (no workbench needed).
+    menu.addSeparator()
+    datum_action = QAction("New Datum Hook...", mw)
+    datum_action.setObjectName("PrintExporterNewDatumAction")
+    datum_action.triggered.connect(
+        lambda: Gui.runCommand("PrintExporter_NewDatumHook", 0)
+    )
+    menu.addAction(datum_action)
+
 
 def _add_shortcut(attempts: int = 40):
     """Bind Ctrl+Shift+P globally via a QShortcut on the main window.
@@ -102,6 +111,8 @@ def _clear_saved_shortcut_override():
 def _install():
     _clear_saved_shortcut_override()
     commands.register()
+    from . import datum_commands
+    datum_commands.register()  # DatumHook create command + restore observer
     QtCore.QTimer.singleShot(0, _add_menu)
     QtCore.QTimer.singleShot(0, _add_shortcut)
 

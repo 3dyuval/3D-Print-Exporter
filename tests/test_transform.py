@@ -11,6 +11,17 @@ def test_translation():
     assert tf.apply_to_point(m, (1, 1, 1)) == (6, 8, 10)
 
 
+def test_mirror_negates_axis():
+    assert tf.apply_to_point(tf.mirror("x"), (2, 3, 4)) == (-2, 3, 4)
+    assert tf.apply_to_point(tf.mirror("y"), (2, 3, 4)) == (2, -3, 4)
+    assert tf.apply_to_point(tf.mirror("z"), (2, 3, 4)) == (2, 3, -4)
+
+
+def test_mirror_twice_is_identity():
+    m = tf.matmul(tf.mirror("x"), tf.mirror("x"))
+    assert tf.apply_to_point(m, (5, 6, 7)) == (5, 6, 7)
+
+
 def test_transformed_z_matches_apply():
     m = tf.translation(0, 0, -4)
     x, y, z = tf.apply_to_point(m, (2, 3, 10))

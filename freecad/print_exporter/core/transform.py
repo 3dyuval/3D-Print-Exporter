@@ -34,6 +34,20 @@ def translation(dx: float, dy: float, dz: float) -> list[list[float]]:
     return m
 
 
+def mirror(axis: str) -> list[list[float]]:
+    """Mirror across the plane normal to `axis` ('x'|'y'|'z'), through origin.
+
+    Implemented as a negative scale on that axis. Note this flips triangle
+    winding; per the 3MF spec consumers treat model volumes with a positive fill
+    rule, so slicers handle it, but pair with ensure_on_bed() since mirroring
+    across an origin plane moves the part.
+    """
+    i = {"x": 0, "y": 1, "z": 2}[axis.lower()]
+    m = identity()
+    m[i][i] = -1.0
+    return m
+
+
 def matmul(a: list[list[float]], b: list[list[float]]) -> list[list[float]]:
     """Compose two 3x4 affine transforms: result applies `b` then `a`.
 

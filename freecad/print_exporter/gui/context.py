@@ -60,6 +60,10 @@ class HookContext:
     def translate(self, dx, dy, dz):
         return tf.translation(dx, dy, dz)
 
+    def mirror(self, axis="x"):
+        """Mirror transform across the plane normal to axis ('x'|'y'|'z')."""
+        return tf.mirror(axis)
+
     def identity(self):
         return tf.identity()
 

@@ -1,4 +1,8 @@
 # SPDX-License-Identifier: MIT
-"""FreeCAD entry point. Registers the single '3D Print Export' command."""
+"""FreeCAD entry point — registers the 3D Print Exporter workbench."""
 
-from freecad.print_exporter.gui import init_gui  # noqa: F401  (side effects)
+import FreeCADGui as Gui
+
+from freecad.print_exporter.gui.workbench import PrintExporterWorkbench
+
+Gui.addWorkbench(PrintExporterWorkbench())

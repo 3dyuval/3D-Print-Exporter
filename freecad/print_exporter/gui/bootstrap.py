@@ -53,13 +53,18 @@ def install(log=print) -> bool:
         return True
     exe = _python_exe()
     log(f"Installing lib3mf via {exe} ...")
+    base = [exe, "-m", "pip", "install", "--user", "--disable-pip-version-check", "lib3mf"]
     try:
-        proc = subprocess.run(
-            [exe, "-m", "pip", "install", "--user", "--disable-pip-version-check", "lib3mf"],
-            capture_output=True,
-            text=True,
-            timeout=180,
-        )
+        proc = subprocess.run(base, capture_output=True, text=True, timeout=180)
+        # PEP 668: distros like Arch mark the system Python "externally managed"
+        # and refuse --user without an override. lib3mf is a pure wheel going to
+        # the user site, so --break-system-packages is safe; retry with it.
+        if proc.returncode != 0 and "externally-managed" in (proc.stderr or ""):
+            log("system Python is externally managed; retrying with --break-system-packages")
+            proc = subprocess.run(
+                base + ["--break-system-packages"],
+                capture_output=True, text=True, timeout=180,
+            )
     except Exception as exc:  # subprocess itself failed to launch
         log(f"pip launch failed: {exc}")
         return False

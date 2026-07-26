@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import os
 
-from .. import BUILTIN_HOOKS_DIR
+from .. import ADDON_ROOT, BUILTIN_HOOKS_DIR
 
 
 def user_hooks_dir() -> str:
@@ -27,4 +27,20 @@ def hook_dirs() -> list[tuple[str, str]]:
     return [
         (BUILTIN_HOOKS_DIR, "builtin"),
         (user_hooks_dir(), "user"),
+    ]
+
+
+def user_param_hooks_dir() -> str:
+    import FreeCAD
+
+    d = os.path.join(FreeCAD.getUserAppDataDir(), "print_exporter_param_hooks")
+    os.makedirs(d, exist_ok=True)
+    return d
+
+
+def param_hook_dirs() -> list[tuple[str, str]]:
+    """Dirs for parametric (DatumHook) macros: bundled param_hooks/ + user dir."""
+    return [
+        (os.path.join(ADDON_ROOT, "param_hooks"), "builtin"),
+        (user_param_hooks_dir(), "user"),
     ]
