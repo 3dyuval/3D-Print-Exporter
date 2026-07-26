@@ -161,19 +161,63 @@ class WorkflowDialog(QtGui.QDialog):
             self._log(traceback.format_exc())
 
 
+# Module-level reference so a modeless dialog opened from a hotkey/console is
+# NOT garbage-collected the instant open_dialog() returns (the classic "script
+# ran but no panel appeared" bug). We keep the panel modeless on purpose so the
+# 3D view stays interactive — you can select a face while it's open.
+_dialog = None
+
+
 def open_dialog():
-    # lib3mf presence check up front, with a friendly message.
-    try:
-        import lib3mf  # noqa: F401
-    except Exception:
-        QtGui.QMessageBox.critical(
+    global _dialog
+
+    # lib3mf presence check up front; offer to auto-install if missing.
+    from . import bootstrap
+
+    if not bootstrap.is_installed():
+        resp = QtGui.QMessageBox.question(
             Gui.getMainWindow(),
             "3D Print Exporter",
-            "lib3mf is not installed in FreeCAD's Python.\n\n"
-            "Install it with FreeCAD's interpreter, e.g.:\n"
-            "    pip install lib3mf\n\n"
-            "then restart FreeCAD.",
+            "lib3mf (required for 3MF export) isn't installed in FreeCAD's "
+            "Python.\n\nInstall it now? (pip install --user lib3mf)",
+            QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
+            QtGui.QMessageBox.Yes,
         )
-        return
-    dlg = WorkflowDialog()
-    dlg.show()
+        if resp != QtGui.QMessageBox.Yes:
+            return
+        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        try:
+            ok = bootstrap.install(log=lambda m: FreeCAD.Console.PrintMessage(f"[3MF] {m}\n"))
+        finally:
+            QtGui.QApplication.restoreOverrideCursor()
+        if not ok:
+            QtGui.QMessageBox.critical(
+                Gui.getMainWindow(),
+                "3D Print Exporter",
+                "Automatic install failed. Install manually with FreeCAD's "
+                "interpreter:\n    python3 -m pip install --user lib3mf\n"
+                "then restart FreeCAD. (See the Report view for details.)",
+            )
+            return
+
+    # Reuse an already-open panel instead of stacking duplicates on repeat presses.
+    if _dialog is not None:
+        try:
+            _dialog.raise_()
+            _dialog.activateWindow()
+            _dialog._refresh_selection()
+            return
+        except RuntimeError:
+            _dialog = None  # underlying C++ dialog was destroyed; recreate
+
+    _dialog = WorkflowDialog()
+    _dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose, False)
+    _dialog.finished.connect(_on_closed)
+    _dialog.show()
+    _dialog.raise_()
+    _dialog.activateWindow()
+
+
+def _on_closed(*_):
+    global _dialog
+    _dialog = None

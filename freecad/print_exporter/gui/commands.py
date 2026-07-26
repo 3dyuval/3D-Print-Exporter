@@ -16,6 +16,7 @@ class PrintExporterCommand:
         return {
             "Pixmap": os.path.join(ICON_DIR, "print_exporter.svg"),
             "MenuText": "3D Print Export",
+            "Accelerator": "Ctrl+Alt+P",
             "ToolTip": (
                 "Export selection to 3MF, then apply build-plate transforms via "
                 "Python hooks (align a selected face to the plate, drop on bed, ...)."
