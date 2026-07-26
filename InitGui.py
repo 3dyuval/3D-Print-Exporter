@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: MIT
-"""FreeCAD entry point — registers the 3D Print Exporter workbench."""
+"""FreeCAD entry point — registers the 3D Tools For Print workbench."""
 
 import FreeCADGui as Gui
 
-from freecad.print_exporter.gui.workbench import PrintExporterWorkbench
+from freecad.tools_for_print.gui.workbench import ToolsForPrintWorkbench
 
-Gui.addWorkbench(PrintExporterWorkbench())
+Gui.addWorkbench(ToolsForPrintWorkbench())

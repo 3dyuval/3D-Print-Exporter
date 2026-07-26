@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""The 3D Print Exporter workbench.
+"""The 3D Tools For Print workbench.
 
 A real Gui.Workbench so command placement is sanctioned by FreeCAD:
 appendMenu/appendToolbar call Command::addTo -> initAction -> setShortcut, which
@@ -16,7 +16,7 @@ import FreeCADGui as Gui
 
 from .. import ICON_DIR
 
-WB_NAME = "3D Print Exporter"
+WB_NAME = "3D Tools For Print"
 _SHORTCUT = "Ctrl+Alt+P"
 
 
@@ -30,18 +30,18 @@ def _install_global_shortcut():
     mw = Gui.getMainWindow()
     if mw is None:
         return
-    if mw.findChild(QShortcut, "PrintExporterShortcut"):
+    if mw.findChild(QShortcut, "ToolsForPrintShortcut"):
         return
     sc = QShortcut(QKeySequence(_SHORTCUT), mw)
-    sc.setObjectName("PrintExporterShortcut")
+    sc.setObjectName("ToolsForPrintShortcut")
     sc.setContext(QtCore.Qt.ApplicationShortcut)
-    sc.activated.connect(lambda: Gui.runCommand("PrintExporter", 0))
+    sc.activated.connect(lambda: Gui.runCommand("ToolsForPrint", 0))
 
 
-class PrintExporterWorkbench(Gui.Workbench):
-    MenuText = "3D Print Exporter"
-    ToolTip = "Export the selection to 3MF with hooks, slicer hand-off and parametric datum hooks"
-    Icon = os.path.join(ICON_DIR, "print_exporter.svg")
+class ToolsForPrintWorkbench(Gui.Workbench):
+    MenuText = "3D Tools For Print"
+    ToolTip = "Export the selection to 3MF with hooks, slicer hand-off and parametric 3D print hooks"
+    Icon = os.path.join(ICON_DIR, "tools_for_print.svg")
 
     def Initialize(self):
         # Register commands (idempotent) and the datum restore observer.
@@ -50,8 +50,8 @@ class PrintExporterWorkbench(Gui.Workbench):
         commands.register()
         datum_commands.register()
 
-        export_cmd = "PrintExporter"
-        datum_cmd = "PrintExporter_NewDatumHook"
+        export_cmd = "ToolsForPrint"
+        datum_cmd = "ToolsForPrint_NewDatumHook"
 
         # appendMenu/appendToolbar is what binds the Accelerator (Ctrl+Alt+P)
         # while this workbench's menu is loaded.

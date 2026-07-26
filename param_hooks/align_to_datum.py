@@ -25,12 +25,12 @@ def compute(inputs):
     Returns the core.transform 3x4 row-major convention. UI-free.
     """
     import FreeCAD
-    from freecad.print_exporter.gui import selection as sel
+    from freecad.tools_for_print.gui import selection as sel
 
     face = inputs.get("PlateFace")
     if face is None or getattr(face, "ShapeType", "") != "Face":
         # Not fulfilled / wrong kind -> identity (execute() also guards on this).
-        from freecad.print_exporter.core import transform as tf
+        from freecad.tools_for_print.core import transform as tf
         return tf.identity()
 
     # Reuse the same normal->-Z math the stateless hook uses.

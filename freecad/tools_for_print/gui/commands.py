@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""The single '3D Print Export' command registered on the global toolbar."""
+"""The single '3D Tools For Print' command registered on the global toolbar."""
 
 from __future__ import annotations
 
@@ -11,11 +11,11 @@ import FreeCADGui as Gui
 from .. import ICON_DIR
 
 
-class PrintExporterCommand:
+class ToolsForPrintCommand:
     def GetResources(self):
         return {
-            "Pixmap": os.path.join(ICON_DIR, "print_exporter.svg"),
-            "MenuText": "3D Print Export",
+            "Pixmap": os.path.join(ICON_DIR, "tools_for_print.svg"),
+            "MenuText": "3D Tools For Print",
             "Accelerator": "Ctrl+Alt+P",
             "ToolTip": (
                 "Export selection to 3MF, then apply build-plate transforms via "
@@ -35,4 +35,4 @@ class PrintExporterCommand:
 
 
 def register():
-    Gui.addCommand("PrintExporter", PrintExporterCommand())
+    Gui.addCommand("ToolsForPrint", ToolsForPrintCommand())

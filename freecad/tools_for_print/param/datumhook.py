@@ -22,10 +22,28 @@ from .. import ICON_DIR
 from . import macros as macromod
 from . import requirements as reqmod
 
-MARKER_PROP = "IsPrintExporterDatumHook"
+MARKER_PROP = "IsToolsForPrintDatumHook"
 MACRO_PROP = "MacroName"
 MACRO_HASH_PROP = "MacroHash"   # hidden: content hash of the macro file on disk
+AUTO_LABEL_PROP = "AutoLabel"   # hidden: last label we auto-set (rename detection)
 BASE_NAME = "DatumHook"
+DEFAULT_LABEL = "3D Print Hook"
+
+
+def _display_name(macro_name: str) -> str:
+    """'align_to_datum' -> 'Align To Datum' (Title Case, underscores -> spaces)."""
+    return " ".join(w.capitalize() for w in macro_name.replace("-", "_").split("_"))
+
+
+def _unique_label(doc, base: str) -> str:
+    """Suffix duplicates so two hooks of the same macro don't look identical."""
+    existing = {o.Label for o in doc.Objects} if doc else set()
+    if base not in existing:
+        return base
+    n = 2
+    while f"{base} ({n})" in existing:
+        n += 1
+    return f"{base} ({n})"
 
 
 def _macro_file_hash(path) -> str:
@@ -107,14 +125,14 @@ class DatumHookViewProxy:
         self.Object = vobj.Object
 
     def getIcon(self):
-        return os.path.join(ICON_DIR, "print_exporter.svg")
+        return os.path.join(ICON_DIR, "tools_for_print.svg")
 
     def doubleClicked(self, vobj):
         _edit(vobj.Object)
         return True
 
     def setupContextMenu(self, vobj, menu):
-        a = menu.addAction("Edit datum hook...")
+        a = menu.addAction("Edit 3D print hook...")
         a.triggered.connect(lambda: _edit(vobj.Object))
 
     def __getstate__(self):
@@ -162,7 +180,11 @@ def create(doc, label=None):
     obj.addProperty("App::PropertyString", MACRO_HASH_PROP, "DatumHook",
                     "Content hash of the macro file (staleness tracking)",
                     read_only=True, hidden=True)
-    obj.Label = label or "Datum Hook"
+    obj.addProperty("App::PropertyString", AUTO_LABEL_PROP, "DatumHook",
+                    "Last auto-assigned label (to detect manual renames)",
+                    read_only=True, hidden=True)
+    obj.Label = label or DEFAULT_LABEL
+    setattr(obj, AUTO_LABEL_PROP, obj.Label)
     if obj.ViewObject is not None:
         obj.ViewObject.Proxy = DatumHookViewProxy()
     return obj
@@ -184,8 +206,26 @@ def _refresh_macro_hash(obj):
         setattr(obj, MACRO_HASH_PROP, new_hash)
 
 
+def _auto_label(obj, macro):
+    """Set the tree Label from the macro (Title Case), UNTIL manually renamed.
+
+    We consider the label 'unedited' if it still equals whatever we last set
+    (tracked in AUTO_LABEL_PROP) or the default. Once the user renames it in the
+    tree, current label != AUTO_LABEL_PROP, and we leave it alone.
+    """
+    if AUTO_LABEL_PROP not in obj.PropertiesList:
+        return
+    last_auto = getattr(obj, AUTO_LABEL_PROP, "")
+    if obj.Label not in (last_auto, DEFAULT_LABEL, ""):
+        return  # user renamed it — respect that
+    new_label = _unique_label(obj.Document, _display_name(macro.name))
+    obj.Label = new_label
+    setattr(obj, AUTO_LABEL_PROP, new_label)
+
+
 def set_macro(obj, macro):
     """Assign a macro to the object and sync its requirement properties."""
     setattr(obj, MACRO_PROP, macro.name)
     reqmod.sync_properties(obj, macro.requirements)
     _refresh_macro_hash(obj)
+    _auto_label(obj, macro)

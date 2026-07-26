@@ -1,4 +1,4 @@
-# 3D Print Exporter (FreeCAD)
+# 3D Tools For Print (FreeCAD)
 
 Export the current selection to **3MF** and apply build-plate operations through
 [**lib3mf**](https://github.com/3MFConsortium/lib3mf) — driven by small **Python
@@ -17,20 +17,20 @@ build plate** or **drop the part on the bed**.
    pip install lib3mf
    ```
    (The 2.5.0 `py3-none` wheel works with FreeCAD 1.1's Python 3.14.)
-3. Restart FreeCAD. Add the **3D Print Export** command to a toolbar via
+3. Restart FreeCAD. Add the **3D Tools For Print** command to a toolbar via
    *Tools → Customize → Commands*, or run it from where you place it.
 
 ## Use
 
 1. Select one or more objects (and optionally one planar **face** if a hook
    needs it — e.g. *align_face_to_plate*).
-2. Run **3D Print Export**.
+2. Run **3D Tools For Print**.
 3. Pick an output path, check the hooks to run (they run top-to-bottom), **Run**.
 
 ## Writing hooks
 
 A hook is a `.py` file defining `hook(ctx)`. Put your own in the user hooks
-folder (button in the dialog, or FreeCAD user dir `/print_exporter_hooks/`);
+folder (button in the dialog, or FreeCAD user dir `/tools_for_print_hooks/`);
 a user hook shadows a bundled one of the same name.
 
 ```python
@@ -75,12 +75,12 @@ lib3mf `to_lib3mf`/`from_lib3mf` bridges.
 ## Layout
 
 ```
-3D-Print-Exporter/
+3D-Tools-For-Print/
   InitGui.py                      registers the single command
   package.xml  pyproject.toml  LICENSE  README.md
-  Resources/icons/print_exporter.svg
+  Resources/icons/tools_for_print.svg
   hooks/                          bundled hooks (ensure_on_bed, align_face_to_plate, rotate_z_45)
-  freecad/print_exporter/
+  freecad/tools_for_print/
     core/                         FreeCAD-free, unit-tested
       transform.py  model.py  operations.py  hooks.py
     gui/                          FreeCAD/Qt glue

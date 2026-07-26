@@ -24,7 +24,7 @@ class DatumHookPanel(QtGui.QDialog):
         super().__init__(parent or Gui.getMainWindow())
         self._obj = obj
         self._macros = macromod.discover(paths.param_hook_dirs())
-        self.setWindowTitle(f"Datum Hook: {obj.Label}")
+        self.setWindowTitle(f"3D Print Hook: {obj.Label}")
         self.resize(460, 360)
         self._req_widgets = {}  # req id -> (widget, getter)
         self._build()

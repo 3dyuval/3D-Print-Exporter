@@ -10,7 +10,7 @@ import types
 sys.modules.setdefault("FreeCAD", types.ModuleType("FreeCAD"))
 sys.modules.setdefault("FreeCADGui", types.ModuleType("FreeCADGui"))
 
-from freecad.print_exporter.param import datumhook  # noqa: E402
+from freecad.tools_for_print.param import datumhook  # noqa: E402
 
 
 def test_hash_stable_and_content_sensitive(tmp_path):

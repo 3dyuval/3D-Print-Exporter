@@ -1,6 +1,6 @@
 import os
 
-from freecad.print_exporter.core import hooks as hookmod
+from freecad.tools_for_print.core import hooks as hookmod
 
 
 def test_discover_and_load(tmp_path):

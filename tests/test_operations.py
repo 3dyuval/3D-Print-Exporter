@@ -1,5 +1,5 @@
-from freecad.print_exporter.core import operations as ops
-from freecad.print_exporter.core import transform as tf
+from freecad.tools_for_print.core import operations as ops
+from freecad.tools_for_print.core import transform as tf
 
 from tests.fakes import FakeBuildItem, FakeModel
 

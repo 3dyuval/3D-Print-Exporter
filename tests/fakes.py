@@ -5,7 +5,7 @@ The core operations only use this surface of ThreeMFModel:
   compose_transform(bi, m), item_min_z(bi), item_vertices(bi).
 """
 
-from freecad.print_exporter.core import transform as tf
+from freecad.tools_for_print.core import transform as tf
 
 
 class FakeBuildItem:

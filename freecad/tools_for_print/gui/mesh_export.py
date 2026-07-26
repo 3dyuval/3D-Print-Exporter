@@ -31,7 +31,7 @@ def _fuse_shapes(objects):
     fused = fused.removeSplitter()  # merge coplanar faces from the boolean
 
     doc = FreeCAD.ActiveDocument
-    feat = doc.addObject("Part::Feature", "PrintExporter_Fused")
+    feat = doc.addObject("Part::Feature", "ToolsForPrint_Fused")
     feat.Shape = fused
     doc.recompute()
     return feat, True

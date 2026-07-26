@@ -23,9 +23,9 @@ from . import paths
 class CreateDatumHookCommand:
     def GetResources(self):
         return {
-            "Pixmap": os.path.join(ICON_DIR, "print_exporter.svg"),
-            "MenuText": "New Datum Hook",
-            "ToolTip": "Create a parametric datum hook object in the document "
+            "Pixmap": os.path.join(ICON_DIR, "tools_for_print.svg"),
+            "MenuText": "New 3D Print Hook",
+            "ToolTip": "Create a parametric 3D print hook object in the document "
                        "(double-click it to choose a macro and fulfil its inputs).",
         }
 
@@ -34,7 +34,7 @@ class CreateDatumHookCommand:
 
     def Activated(self):
         doc = FreeCAD.ActiveDocument
-        doc.openTransaction("Create Datum Hook")
+        doc.openTransaction("Create 3D Print Hook")
         obj = datumhook.create(doc)
         doc.commitTransaction()
         doc.recompute()
@@ -84,7 +84,7 @@ _observer = None
 
 def register():
     global _observer
-    Gui.addCommand("PrintExporter_NewDatumHook", CreateDatumHookCommand())
+    Gui.addCommand("ToolsForPrint_NewDatumHook", CreateDatumHookCommand())
     if _observer is None:
         _observer = _RestoreObserver()
         FreeCAD.addDocumentObserver(_observer)

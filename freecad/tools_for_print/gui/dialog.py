@@ -87,7 +87,7 @@ class HookEditor(QtGui.QDialog):
 class WorkflowDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         super().__init__(parent or Gui.getMainWindow())
-        self.setWindowTitle("3D Print Export")
+        self.setWindowTitle("3D Tools For Print")
         self.resize(560, 560)
         self._hooks = hookmod.discover(paths.hook_dirs())
         self._build_ui()
@@ -171,7 +171,7 @@ class WorkflowDialog(QtGui.QDialog):
         self._datum_rows = []
         datum_objs = self._list_datum_hooks()
         if datum_objs:
-            lay.addWidget(QtGui.QLabel("Datum hooks (parametric, from tree):"))
+            lay.addWidget(QtGui.QLabel("3D Print hooks (parametric, from tree):"))
             for o in datum_objs:
                 chk = QtGui.QCheckBox(f"{o.Label}")
                 chk.setChecked(True)
@@ -332,7 +332,7 @@ def open_dialog():
     if not bootstrap.is_installed():
         resp = QtGui.QMessageBox.question(
             Gui.getMainWindow(),
-            "3D Print Exporter",
+            "3D Tools For Print",
             "lib3mf (required for 3MF export) isn't installed in FreeCAD's "
             "Python.\n\nInstall it now? (pip install --user lib3mf)",
             QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
@@ -348,7 +348,7 @@ def open_dialog():
         if not ok:
             QtGui.QMessageBox.critical(
                 Gui.getMainWindow(),
-                "3D Print Exporter",
+                "3D Tools For Print",
                 "Automatic install failed. Install manually with FreeCAD's "
                 "interpreter:\n    python3 -m pip install --user lib3mf\n"
                 "then restart FreeCAD. (See the Report view for details.)",

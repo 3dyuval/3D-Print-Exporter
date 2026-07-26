@@ -1,4 +1,4 @@
-from freecad.print_exporter.param import requirements as req
+from freecad.tools_for_print.param import requirements as req
 
 
 class FakeObj:

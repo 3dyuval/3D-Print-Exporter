@@ -9,7 +9,7 @@ from .. import ADDON_ROOT, BUILTIN_HOOKS_DIR
 
 
 def user_hooks_dir() -> str:
-    """~/.../FreeCAD/<ver>/print_exporter_hooks — created on demand.
+    """~/.../FreeCAD/<ver>/tools_for_print_hooks — created on demand.
 
     Uses FreeCAD's user data dir so it survives across the app but stays out of
     the addon (which the Addon Manager may overwrite on update).
@@ -17,7 +17,7 @@ def user_hooks_dir() -> str:
     import FreeCAD
 
     base = FreeCAD.getUserAppDataDir()
-    d = os.path.join(base, "print_exporter_hooks")
+    d = os.path.join(base, "tools_for_print_hooks")
     os.makedirs(d, exist_ok=True)
     return d
 
@@ -33,7 +33,7 @@ def hook_dirs() -> list[tuple[str, str]]:
 def user_param_hooks_dir() -> str:
     import FreeCAD
 
-    d = os.path.join(FreeCAD.getUserAppDataDir(), "print_exporter_param_hooks")
+    d = os.path.join(FreeCAD.getUserAppDataDir(), "tools_for_print_param_hooks")
     os.makedirs(d, exist_ok=True)
     return d
 
