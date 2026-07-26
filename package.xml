@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
+  <name>3D Print Exporter</name>
+  <description>Export the selection to 3MF and apply build-plate operations through lib3mf, driven by Python hook scripts. Instead of hand-writing vertices/triangles XML, geometry goes through lib3mf's typed API; hooks receive a rich context (selection, lib3mf model, helpers) so you can, e.g., align a selected face/plane to the build plate or drop the part on the bed.</description>
+  <version>0.1.0</version>
+  <date>2026-07-26</date>
+  <maintainer email="yuvddd@pm.me">Yuval Dikerman</maintainer>
+  <author email="yuvddd@pm.me">Yuval Dikerman</author>
+  <license file="LICENSE">MIT</license>
+  <icon>Resources/icons/print_exporter.svg</icon>
+  <content>
+    <macro>
+      <name>3D Print Exporter</name>
+      <icon>Resources/icons/print_exporter.svg</icon>
+    </macro>
+  </content>
+  <freecadmin>1.0.0</freecadmin>
+  <pythonmin>3.11</pythonmin>
+  <depend type="python">lib3mf</depend>
+  <tag>3mf</tag>
+  <tag>export</tag>
+  <tag>mesh</tag>
+  <tag>3d-printing</tag>
+  <tag>lib3mf</tag>
+  <tag>hooks</tag>
+</package>
